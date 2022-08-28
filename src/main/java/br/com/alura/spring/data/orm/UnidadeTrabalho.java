@@ -1,10 +1,12 @@
 package br.com.alura.spring.data.orm;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "cargo")
-public class Cargo {
+@Table(name = "unidades_trabalho")
+public class UnidadeTrabalho {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -12,11 +14,17 @@ public class Cargo {
 
     private String descricao;
 
-    public Cargo() {
+    private String endereco;
+
+    @ManyToMany(mappedBy = "unidadesTrabalhos")
+    private final List<Funcionario> funcionarios = new ArrayList<>();
+
+    public UnidadeTrabalho() {
     }
 
-    public Cargo(String descricao) {
+    public UnidadeTrabalho(String descricao, String endereco) {
         this.descricao = descricao;
+        this.endereco = endereco;
     }
 
     public Long getId() {
@@ -35,11 +43,11 @@ public class Cargo {
         this.descricao = descricao;
     }
 
-    @Override
-    public String toString() {
-        return "Cargo{" +
-                "id=" + id +
-                ", descricao='" + descricao + '\'' +
-                '}';
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 }
