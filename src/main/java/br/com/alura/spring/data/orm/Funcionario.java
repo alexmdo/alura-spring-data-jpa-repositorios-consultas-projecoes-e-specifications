@@ -1,110 +1,101 @@
 package br.com.alura.spring.data.orm;
 
-import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 @Entity
-@Table(name = "funcionario")
+@Table(name = "funcionarios")
 public class Funcionario {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	private String nome;
+	private String cpf;
+	private Double salario;
+	private LocalDate dataContratacao;
+	@ManyToOne
+	@JoinColumn(name = "cargo_id", nullable = false)
+	private Cargo cargo;
+	@Fetch(FetchMode.SELECT)
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "funcionarios_unidades", joinColumns = {
+			@JoinColumn(name = "fk_funcionario") }, 
+	inverseJoinColumns = { @JoinColumn(name = "fk_unidade") })
+	private List<UnidadeTrabalho> unidadeTrabalhos;
 
-    private String nome;
-    private String cpf;
-    private BigDecimal salario;
-    private LocalDate dataContratacao;
+	public Integer getId() {
+		return id;
+	}
 
-    @ManyToOne
-    @JoinColumn(name = "cargo_id")
-    private Cargo cargo;
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    @ManyToMany
-    @JoinTable(name = "funcionarios_unidades_trabalhos",
-            joinColumns = @JoinColumn(name = "funcionario_id"),
-            inverseJoinColumns = @JoinColumn(name = "id"))
-    private List<UnidadeTrabalho> unidadesTrabalhos = new ArrayList<>();
+	public String getNome() {
+		return nome;
+	}
 
-    public Funcionario() {
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public Funcionario(String nome, String cpf, BigDecimal salario, LocalDate dataContratacao, Cargo cargo) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.salario = salario;
-        this.dataContratacao = dataContratacao;
-        this.cargo = cargo;
-    }
+	public String getCpf() {
+		return cpf;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public Double getSalario() {
+		return salario;
+	}
 
-    public String getNome() {
-        return nome;
-    }
+	public void setSalario(Double salario) {
+		this.salario = salario;
+	}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+	public LocalDate getDataContratacao() {
+		return dataContratacao;
+	}
 
-    public String getCpf() {
-        return cpf;
-    }
+	public void setDataContratacao(LocalDate dataContratacao) {
+		this.dataContratacao = dataContratacao;
+	}
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
+	public Cargo getCargo() {
+		return cargo;
+	}
 
-    public BigDecimal getSalario() {
-        return salario;
-    }
+	public void setCargo(Cargo cargo) {
+		this.cargo = cargo;
+	}
 
-    public void setSalario(BigDecimal salario) {
-        this.salario = salario;
-    }
+	public List<UnidadeTrabalho> getUnidadeTrabalhos() {
+		return unidadeTrabalhos;
+	}
 
-    public LocalDate getDataContratacao() {
-        return dataContratacao;
-    }
+	public void setUnidadeTrabalhos(List<UnidadeTrabalho> unidadeTrabalhos) {
+		this.unidadeTrabalhos = unidadeTrabalhos;
+	}
 
-    public void setDataContratacao(LocalDate dataContratacao) {
-        this.dataContratacao = dataContratacao;
-    }
-
-    public Cargo getCargo() {
-        return cargo;
-    }
-
-    public void setCargo(Cargo cargo) {
-        this.cargo = cargo;
-    }
-
-    public List<UnidadeTrabalho> getUnidadesTrabalhos() {
-        return unidadesTrabalhos;
-    }
-
-    public void setUnidadesTrabalhos(List<UnidadeTrabalho> unidadesTrabalhos) {
-        this.unidadesTrabalhos = unidadesTrabalhos;
-    }
-
-    @Override
-    public String toString() {
-        return "Funcionario{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", cpf='" + cpf + '\'' +
-                ", salario=" + salario +
-                ", dataContratacao=" + dataContratacao +
-                ", cargo=" + cargo +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "Funcionario: " + "id:" + id + "| nome:'" + nome + "| cpf:" + cpf + "| salario:" + salario
+				+ "| dataContratacao:" + dataContratacao + "| cargo:" + cargo.getDescricao();
+	}
 }

@@ -1,37 +1,31 @@
 package br.com.alura.spring.data.orm;
 
-import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
 @Entity
-@Table(name = "unidades_trabalho")
+@Table(name = "unidade_trabalho")
 public class UnidadeTrabalho {
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
-
+    private Integer id;
     private String descricao;
-
     private String endereco;
+    @ManyToMany(mappedBy = "unidadeTrabalhos", fetch = FetchType.EAGER)
+    private List<Funcionario> funcionarios;
 
-    @ManyToMany(mappedBy = "unidadesTrabalhos")
-    private final List<Funcionario> funcionarios = new ArrayList<>();
-
-    public UnidadeTrabalho() {
-    }
-
-    public UnidadeTrabalho(String descricao, String endereco) {
-        this.descricao = descricao;
-        this.endereco = endereco;
-    }
-
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -49,5 +43,20 @@ public class UnidadeTrabalho {
 
     public void setEndereco(String endereco) {
         this.endereco = endereco;
+    }
+
+    public List<Funcionario> getFuncionarios() {
+        return funcionarios;
+    }
+
+    public void setFuncionarios(List<Funcionario> funcionarios) {
+        this.funcionarios = funcionarios;
+    }
+
+    @Override
+    public String toString() {
+        return "Unidades: " + "id:" + id +
+                "| descricao:" + descricao +
+                "| endereco:" + endereco;
     }
 }
