@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
+import br.com.alura.spring.data.orm.FuncionarioProjecao;
 import org.springframework.stereotype.Service;
 
 import br.com.alura.spring.data.orm.Funcionario;
@@ -29,19 +30,26 @@ public class RelatoriosService {
 			System.out.println("1 - Busca funcionario nome");
 			System.out.println("2 - Busca funcionario nome, data contratacao e salario maior");
 			System.out.println("3 - Busca funcionario data contratacao");
-			
+			System.out.println("4 - Pesquisa funcionário salário");
+
 			int action = scanner.nextInt();
 
 			switch (action) {
 				case 1 -> buscaFuncionarioNome(scanner);
 				case 2 -> buscaFuncionarioNomeSalarioMaiorData(scanner);
 				case 3 -> buscaFuncionarioDataContratacao(scanner);
+				case 4 -> pesquisaFuncionarioSalario();
 				default -> system = false;
 			}
 			
 		}
 	}
-	
+
+	private void pesquisaFuncionarioSalario() {
+		List<FuncionarioProjecao> funcionarioSalario = funcionarioRepository.findFuncionarioSalario();
+		funcionarioSalario.forEach(f -> System.out.printf("ID: %d, Nome: %s, Salario: %s%n", f.getId(), f.getNome(), f.getSalario()));
+	}
+
 	private void buscaFuncionarioNome(Scanner scanner) {
 		System.out.println("Qual nome deseja pesquisar");
 		String nome = scanner.next();
